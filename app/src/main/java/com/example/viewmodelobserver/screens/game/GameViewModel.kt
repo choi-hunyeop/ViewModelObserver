@@ -45,9 +45,28 @@ class GameViewModel: ViewModel() {
 
     private lateinit var wordList: MutableList<String>
 
+    private val timer: CountDownTimer
+
+    // The String version of the current time
+    val currentTimeString = Transformations.map(currentTime) { time ->
+        DateUtils.formatElapsedTime(time)
+    }
+
     init {
         _word.value = ""
         _score.value = 0
+        timer = object : CountDownTimer(COUNTDOWN_TIME, ONE_SECOND) {
+            override fun onTick(millisUntilFinished: Long) {
+                _currentTime.value = millisUntilFinished/ONE_SECOND
+            }
+            override fun onFinish() {
+                _currentTime.value = DONE
+                onGameFinish()
+            }
+        }
+
+        timer.start()
+
     }
     /**
      * Resets the list of words and randomizes the order

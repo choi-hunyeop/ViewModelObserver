@@ -44,15 +44,18 @@ class ScoreFragment : Fragment() {
         viewModel = ViewModelProvider(this, viewModelFactory)
             .get(ScoreViewModel::class.java)
 
-        viewModel.score.observe(viewLifecycleOwner, Observer { newScore ->
-            binding.scoreText.text = newScore.toString()
-        })
+        //뷰모델과 xml에 data로 선언한 뷰모델을 연결
+        // 뷰모델로 가져온 ScoreViewModel이나, data로 선언한 ScoreViewModel이랑 서로 같은 거임
+        binding.scoreViewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+//        viewModel.score.observe(viewLifecycleOwner, Observer { newScore ->
+//            binding.scoreText.text = newScore.toString()
+//        })
 
-
-        binding.playAgainButton.setOnClickListener { viewModel.onPlayAgain() }
+            //바인딩되어 xml에 직접 메소드연결함
+//        binding.playAgainButton.setOnClickListener { viewModel.onPlayAgain() }
 
         viewModel.eventPlayAgain.observe(viewLifecycleOwner, Observer { playAgain ->
-            Log.e("asdasd", "다시 들어오나??")
             if (playAgain) {
                 findNavController().navigate(ScoreFragmentDirections.actionRestart())
                 viewModel.onPlayAgainComplete()

@@ -38,24 +38,20 @@ class GameFragment : Fragment(){
         Log.i("GameFragment", "Called ViewModelProvider.get")
         viewModel = ViewModelProvider(this).get(GameViewModel::class.java)
 
-        binding.gameViewModel = viewModel
 
-        binding.lifecycleOwner = viewLifecycleOwner
-
-        //데이터바인딩으로 필요없어짐
-//        binding.correctButton.setOnClickListener { onCorrect() }
-//        binding.skipButton.setOnClickListener { onSkip() }
-//        binding.endGameButton.setOnClickListener{
-//            onEndGame()
-//        }
+        binding.correctButton.setOnClickListener { onCorrect() }
+        binding.skipButton.setOnClickListener { onSkip() }
+        binding.endGameButton.setOnClickListener{
+            onEndGame()
+        }
 
         viewModel.score.observe(viewLifecycleOwner, Observer { newScore ->
             binding.scoreText.text = newScore.toString()
         })
-        // binding.lifecycleOwner = viewLifecycleOwner<<해당코드로 데이터바인딩을했기에 필요없음
-//        viewModel.word.observe(viewLifecycleOwner, Observer { newWord ->
-//            binding.wordText.text = newWord
-//        })
+         binding.lifecycleOwner = viewLifecycleOwner
+        viewModel.word.observe(viewLifecycleOwner, Observer { newWord ->
+            binding.wordText.text = newWord
+        })
 
         viewModel.eventGameFinish.observe(viewLifecycleOwner, { hasFinished ->
             if(hasFinished) gameFinished()
@@ -64,20 +60,19 @@ class GameFragment : Fragment(){
 
     }
 
-//데이터바인딩으로 필요없어짐
-//    /** Methods for button click handlers **/
-//
-//    private fun onSkip() {
-//        viewModel.onSkip()
-//    }
-//
-//    private fun onCorrect() {
-//        viewModel.onCorrect()
-//    }
-//
-//    private fun onEndGame() {
-//        gameFinished()
-//    }
+    /** Methods for button click handlers **/
+
+    private fun onSkip() {
+        viewModel.onSkip()
+    }
+
+    private fun onCorrect() {
+        viewModel.onCorrect()
+    }
+
+    private fun onEndGame() {
+        gameFinished()
+    }
 
     /**
      * Called when the game is finished
